@@ -14,8 +14,6 @@ const submit = () =>{
     });
 };
 </script>
-
-
 <template>
     <Head title="| Register" />
     <h1 class="title">Register A New Account</h1>
