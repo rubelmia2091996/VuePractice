@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,8 @@ use Inertia\Inertia;
 |
 */
 
-Route::inertia('/','Home');
-Route::inertia('/about','About');
+Route::inertia('/','Home')->name('home');
+Route::inertia('/register','Auth/Register')->name('register');
+Route::post('/register',[AuthController::class, 'store'])->name('register.store');
+// Route::inertia('/','Home')->name('home');
+// Route::inertia('/about','About')->name('about');
