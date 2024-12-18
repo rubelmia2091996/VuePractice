@@ -19,7 +19,11 @@ defineProps({
       </thead>
       <tbody>
         <tr v-for="user in users" :key="user.id">
-          <td><img :src="user.avatar" class="avatar" alt="Avatar" /></td>
+          <img 
+              :src="user.avatar ? '/storage/avatars/' + user.avatar : '/storage/avatars/default.png'" 
+              alt="Avatar"
+              class="w-10 h-10 rounded-full"
+            />
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
           <td>{{ user.created_at }}</td>
