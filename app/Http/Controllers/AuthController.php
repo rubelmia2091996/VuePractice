@@ -11,6 +11,7 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
+        // dd($request->all());
         // Validate
         $fields = $request->validate([
             'avatar' => ['file', 'nullable', 'max:3000'],
@@ -59,16 +60,12 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // Logout
         Auth::logout();
-
-        // invalidate session
+ 
         $request->session()->invalidate();
-
-        // Regenerate CSRF token
+    
         $request->session()->regenerateToken();
-
-        // Redirect to Home
-        return redirect()->route('home');
+    
+        return redirect('/');
     }
 }

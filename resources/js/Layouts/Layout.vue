@@ -20,7 +20,7 @@
             :src="
               $page.props.auth.user.avatar
                 ? 'storage/' + $page.props.auth.user.avatar
-                : 'storage/avatars/default.jpeg'
+                : 'storage/avatars/default.png'
             "
             alt=""
           />

@@ -38,11 +38,10 @@ const submit = () => {
           <label for="avatar" class="absolute inset-0 grid content-end cursor-pointer">
             <span class="bg-white/70 pb-2 text-center">Avatar</span>
           </label>
-          <input type="file" @input="change" id="avatar" hidden />
+          <input type="file" @input="change" name="avater" id="avatar" hidden />
 
           <img
-            class="object-cover w-28 h-28"
-            :src="form.preview ?? 'storage/avatars/default.jpeg'"
+            class="object-cover w-28 h-28" :src="form.preview ?? 'storage/avatars/default.png'"
           />
         </div>
 
