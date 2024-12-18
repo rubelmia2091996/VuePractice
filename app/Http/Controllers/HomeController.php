@@ -5,31 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $users = User::paginate(10);
-
-            return inertia('Home', [
-                'users' => $users,
-            ]);
-        // , [
-        //     'users' => User::when($request->search, function ($query) use ($request) {
-        //         $query
-        //             ->where('name', 'like', '%' . $request->search . '%')
-        //             ->orWhere('email', 'like', '%' . $request->search . '%');
-        //     })->paginate(5)->withQueryString(),
-        
-        //     'searchTerm' => $request->search,
-        
-        //     'can' => [
-        //         'delete_user' =>
-        //         Auth::user() ?
-        //             Auth::user()->can('delete', User::class) :
-        //             null
-        //     ]
-        // ]
+        $startTime = microtime(true);
+        $users = Redis::get('users.all');
+        if (!$users) {
+            $users = User::all();
+            Redis::set('users.all', json_encode($users), 'EX', 60 * 60);
+        } else {
+            $users = json_decode($users);
+        }
+        $endTime = microtime(true);
+        $executionTime = $endTime - $startTime;
+        return inertia('Home', [
+            'users' => $users,
+            'executionTime' => $executionTime,
+        ]);
     }
 }

@@ -17,7 +17,7 @@ use App\Models\User;
 |
 */
 
-Route::inertia('/', 'Home', ['users'=>User::paginate(10)])->name('first');
+Route::inertia('/', 'Home', ['users'=>User::all()])->name('first');
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
