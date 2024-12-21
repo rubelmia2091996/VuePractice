@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\Redis;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $startTime = microtime(true);
-        $users = Redis::get('users.all');
+        $page = $request->input('page', 1);
+        $cacheKey = 'users.page.' . $page;
+        $users = Redis::get($cacheKey);
         if (!$users) {
-            $users = User::all();
-            Redis::set('users.all', json_encode($users), 'EX', 60 * 60);
+            $users = User::paginate(10); 
+            Redis::set($cacheKey, json_encode($users), 'EX', 60 * 60);
         } else {
             $users = json_decode($users);
         }
@@ -27,4 +29,5 @@ class HomeController extends Controller
             'executionTime' => $executionTime,
         ]);
     }
+
 }

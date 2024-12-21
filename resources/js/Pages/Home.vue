@@ -1,6 +1,6 @@
 <script setup>
 defineProps({
-  users: Array,
+  users: Object,
   executionTime: String,
 });
 </script>
@@ -11,6 +11,7 @@ defineProps({
     <table>
       <thead>
         <tr>
+          <th>SL</th>
           <th>Avatar</th>
           <th>Name</th>
           <th>Email</th>
@@ -18,7 +19,8 @@ defineProps({
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user.id">
+        <tr v-for="user in users.data" :key="user.id">
+          <td>{{ key }}</td>
           <img 
               :src="user.avatar ? '/storage/avatars/' + user.avatar : '/storage/avatars/default.png'" 
               alt="Avatar"
@@ -31,6 +33,6 @@ defineProps({
       </tbody>
     </table>
 
-    <p><strong>Execution Time:</strong> {{ executionTime }} seconds</p>
+    <!-- <p><strong>Execution Time:</strong> {{ executionTime }} seconds</p> -->
   </div>
 </template>
