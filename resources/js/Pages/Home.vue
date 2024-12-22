@@ -1,12 +1,38 @@
 <script setup>
-defineProps({
+import { ref,watch } from "vue";
+import PaginationLinks from "./Components/PaginationLinks.vue";
+import { router } from "@inertiajs/vue3";
+import { debounce } from "lodash";
+const props = defineProps({
   users: Object,
   executionTime: String,
+  searchTerm : String,
+  can: Object,
 });
+const search = ref(props.searchTerm);
+watch(search, debounce((q) => {
+  router.get('/', { search: q }, { preserveState: true });
+}, 500));
+
+const getDate = (date) => 
+  new Date(date).toLocaleDateString("en-us", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
+
 </script>
 
 <template>
-  <div>
+  <Head :title="` | ${$page.component}`" />
+  <div v-if="$page.props.auth.user">
+    <div class="flex justify-end mb-4">
+      <div class="w-1/4">
+        <input type="search" placeholder="Search" v-model="search">
+      </div>
+
+    </div>
     <h1>User List</h1>
     <table>
       <thead>
@@ -16,6 +42,7 @@ defineProps({
           <th>Name</th>
           <th>Email</th>
           <th>Created At</th>
+          <th v-if="can.delete_user">Delete</th>
         </tr>
       </thead>
       <tbody>
@@ -28,11 +55,16 @@ defineProps({
             />
           <td>{{ user.name }}</td>
           <td>{{ user.email }}</td>
-          <td>{{ user.created_at }}</td>
+          <td>{{ getDate(user.created_at) }}</td>
+          <td v-if="can.delete_user">
+            <button class="bg-red-500 w-6 h-6 rounded-full"></button>
+          </td>
         </tr>
       </tbody>
     </table>
-
-    <!-- <p><strong>Execution Time:</strong> {{ executionTime }} seconds</p> -->
+    <div>
+      <PaginationLinks :paginator="users" />
+    </div>
+    <p><strong>Execution Time:</strong> {{ executionTime }} seconds</p>
   </div>
 </template>
